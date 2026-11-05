@@ -4,7 +4,7 @@ layout: home
 hero:
   name: PS2BUILD
   text: SDK Homebrew
-  tagline: Sistema de compilaci贸n y SDK para homebrew de PlayStation 2
+  tagline: Sistema de compilaci脙鲁n y SDK para homebrew de PlayStation 2
   image:
     src: /logo.svg
     alt: PS2BUILD
@@ -13,7 +13,7 @@ hero:
       text: Empieza a compilar
       link: /es/guide/getting-started
     - theme: alt
-      text: Lee la documentaci贸n
+      text: Lee la documentaci脙鲁n
       link: /es/guide/architecture/introduction
 ---
 
@@ -71,7 +71,7 @@ const links = [
 ]
 </script>
 
-## Instalaci髇
+## Instalaci贸n
 
 ::: code-group
 ```powershell [Windows]
@@ -86,19 +86,19 @@ curl -sSfL https://ps2build.dev/install.sh | sh
 <OsTiles />
 </FeatureSection>
 
-<FeatureSection index="02" title="Aut髇omo" text="Se instala en su propio directorio y funciona en tu sistema operativo.">
+<FeatureSection index="02" title="Aut贸nomo" text="Se instala en su propio directorio y funciona de forma nativa en tu sistema operativo.">
 
 - Sin Docker
-- Sin configuraci髇 manual del entorno
+- Sin configuraci贸n manual del entorno
 - Toolchain y paquetes instalados y actualizados por `ps2build`
 
 </FeatureSection>
 
-<FeatureSection index="03" title="Definiciones de build simples" wide text="Un Makefile que incluye reglas compartidas y lista rutas de include, rutas de bibliotecas y flags -l se convierte en un 鷑ico ps2.yaml. Los paquetes indicados en libs: aportan sus headers y flags de enlazado.">
+<FeatureSection index="03" title="Definiciones de build simples" wide>
 <HomeShowcase :before="before" :after="after" />
 </FeatureSection>
 
-<FeatureSection index="04" title="Soporte de editores" text="compile_commands.json viene incluido. Funciona en la mayor韆 de editores.">
+<FeatureSection index="04" title="Soporte de editores" text="compile_commands.json viene incluido. Funciona en la mayor铆a de editores.">
 <EditorTiles />
 </FeatureSection>
 

@@ -2,7 +2,7 @@
 defineProps<{
   index: string
   title: string
-  text: string
+  text?: string
   flip?: boolean
   wide?: boolean
 }>()
@@ -13,7 +13,7 @@ defineProps<{
     <div class="copy">
       <span class="index">{{ index }}</span>
       <h2>{{ title }}</h2>
-      <p>{{ text }}</p>
+      <p v-if="text">{{ text }}</p>
     </div>
     <div class="visual"><slot /></div>
   </section>

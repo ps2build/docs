@@ -13,7 +13,7 @@ hero:
       text: Comece a compilar
       link: /pt-br/guide/getting-started
     - theme: alt
-      text: Leia a documentaÃ§Ã£o
+      text: Leia a documentaÃƒÂ§ÃƒÂ£o
       link: /pt-br/guide/architecture/introduction
 ---
 
@@ -64,14 +64,14 @@ const actions = [
 ]
 
 const links = [
-  { text: 'Referência do ps2.yaml', link: '/pt-br/guide/ps2-yaml' },
+  { text: 'ReferÃªncia do ps2.yaml', link: '/pt-br/guide/ps2-yaml' },
   { text: 'Pacotes', link: '/pt-br/guide/packages' },
   { text: 'Toolchain LLVM', link: '/guide/llvm' },
   { text: 'Arquitetura do PS2', link: '/pt-br/guide/architecture/introduction' },
 ]
 </script>
 
-## Instalação
+## InstalaÃ§Ã£o
 
 ::: code-group
 ```powershell [Windows]
@@ -86,19 +86,19 @@ curl -sSfL https://ps2build.dev/install.sh | sh
 <OsTiles />
 </FeatureSection>
 
-<FeatureSection index="02" title="Autocontido" text="Instala em seu próprio diretório e roda no seu sistema operacional.">
+<FeatureSection index="02" title="Autocontido" text="Instala em seu prÃ³prio diretÃ³rio e roda nativamente no seu sistema operacional.">
 
 - Sem Docker
-- Sem configuração manual do ambiente
+- Sem configuraÃ§Ã£o manual do ambiente
 - Toolchain e pacotes instalados e atualizados pelo `ps2build`
 
 </FeatureSection>
 
-<FeatureSection index="03" title="Definições de build simples" wide text="Um Makefile que inclui regras compartilhadas e lista caminhos de include, caminhos de bibliotecas e flags -l vira um único ps2.yaml. Os pacotes listados em libs: fornecem seus headers e flags de linkagem.">
+<FeatureSection index="03" title="DefiniÃ§Ãµes de build simples" wide>
 <HomeShowcase :before="before" :after="after" />
 </FeatureSection>
 
-<FeatureSection index="04" title="Suporte a editores" text="compile_commands.json já vem incluído. Funciona na maioria dos editores.">
+<FeatureSection index="04" title="Suporte a editores" text="compile_commands.json jÃ¡ vem incluÃ­do. Funciona na maioria dos editores.">
 <EditorTiles />
 </FeatureSection>
 

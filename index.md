@@ -86,7 +86,7 @@ curl -sSfL https://ps2build.dev/install.sh | sh
 <OsTiles />
 </FeatureSection>
 
-<FeatureSection index="02" title="Self contained" text="Installs into its own directory and runs on your OS.">
+<FeatureSection index="02" title="Self contained" text="Installs into its own directory and runs natively on your OS.">
 
 - No Docker
 - No manual environment setup
@@ -94,7 +94,7 @@ curl -sSfL https://ps2build.dev/install.sh | sh
 
 </FeatureSection>
 
-<FeatureSection index="03" title="Simple build definitions" wide text="A Makefile that includes shared rules and lists include paths, library paths and -l flags becomes one ps2.yaml. Packages named in libs: supply their headers and link flags.">
+<FeatureSection index="03" title="Simple build definitions" wide>
 <HomeShowcase :before="before" :after="after" />
 </FeatureSection>
 
