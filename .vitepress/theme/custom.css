@@ -56,3 +56,19 @@
 .VPNavBarTranslations::before {
   display: none;
 }
+
+@media (min-width: 960px) {
+  .VPSidebar {
+    top: var(--vp-nav-height) !important;
+    padding-top: 0 !important;
+    padding-bottom: 96px !important;
+  }
+
+  .VPSidebar nav {
+    padding-top: 16px !important;
+  }
+
+  .VPSidebar .curtain {
+    display: none !important;
+  }
+}

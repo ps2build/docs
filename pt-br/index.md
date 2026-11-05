@@ -16,7 +16,7 @@ hero:
       text: Comece a compilar
       link: /pt-br/guide/getting-started
     - theme: alt
-      text: Leia a documentaÃ§Ã£o
+      text: Leia a documentação
       link: /pt-br/guide/architecture/introduction
 ---
 

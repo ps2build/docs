@@ -7,7 +7,7 @@ description: "PS2BUILD es un sistema de build y SDK para homebrew de PlayStation
 hero:
   name: PS2BUILD
   text: SDK Homebrew
-  tagline: Sistema de compilaciÃ³n y SDK para homebrew de PlayStation 2
+  tagline: Sistema de compilación y SDK para homebrew de PlayStation 2
   image:
     src: /logo.svg
     alt: PS2BUILD
@@ -16,7 +16,7 @@ hero:
       text: Empieza a compilar
       link: /es/guide/getting-started
     - theme: alt
-      text: Lee la documentaciÃ³n
+      text: Lee la documentación
       link: /es/guide/architecture/introduction
 ---
 
