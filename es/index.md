@@ -18,19 +18,60 @@ hero:
 ---
 
 <script setup>
-import LinkGrid from '../.vitepress/components/LinkGrid.vue'
+import HomeShowcase from '../.vitepress/components/HomeShowcase.vue'
+import FeatureSection from '../.vitepress/components/FeatureSection.vue'
+import OsTiles from '../.vitepress/components/OsTiles.vue'
+import EditorTiles from '../.vitepress/components/EditorTiles.vue'
+
+const before = {
+  title: 'ps2sdk Makefile',
+  code: `EE_BIN = my-game.elf
+EE_OBJS = main.o
+EE_INCS += -I$(PS2SDK)/ports/include
+EE_LDFLAGS += -L$(PS2SDK)/ports/lib
+EE_LIBS += -lpng -lz -lfreetype -lgskit -ldmakit
+
+all: $(EE_BIN)
+
+clean:
+	rm -f $(EE_BIN) $(EE_OBJS)
+
+include $(PS2SDK)/samples/Makefile.pref
+include $(PS2SDK)/samples/Makefile.eeglobal`,
+}
+
+const after = {
+  title: 'ps2.yaml',
+  code: `project: my-game
+
+targets:
+  - name: my-game
+    type: ee
+    sources: [main.c]
+    libs: [png, freetype, gskit, dmakit]`,
+}
+
+const platformsLabel = 'Works on'
+const platforms = [
+  { id: 'windows', name: 'Windows' },
+  { id: 'linux', name: 'Linux' },
+  { id: 'macos', name: 'macOS' },
+]
+
+const actions = [
+  { text: 'Empieza a compilar', link: '/es/guide/getting-started', primary: true },
+  { text: 'Migrando desde ps2sdk', link: '/es/guide/migration' },
+]
 
 const links = [
-  { title: 'Primeros pasos', text: 'Crea y compila un proyecto', link: '/es/guide/getting-started' },
-  { title: 'ps2.yaml', text: 'El formato de definici贸n de compilaci贸n', link: '/es/guide/ps2-yaml' },
-  { title: 'Paquetes', text: 'Bibliotecas y drivers, y c贸mo los resuelve libs:', link: '/es/guide/packages' },
-  { title: 'Toolchain LLVM', text: 'Compila con clang en lugar de GCC (beta)', link: '/guide/llvm' },
-  { title: 'Arquitectura de PS2', text: 'C贸mo encaja el hardware', link: '/es/guide/architecture/introduction' },
-  { title: 'Referencia de la API', text: 'Pr贸ximamente', link: '/es/api/' },
+  { text: 'Referencia de ps2.yaml', link: '/es/guide/ps2-yaml' },
+  { text: 'Paquetes', link: '/es/guide/packages' },
+  { text: 'Toolchain LLVM', link: '/guide/llvm' },
+  { text: 'Arquitectura de PS2', link: '/es/guide/architecture/introduction' },
 ]
 </script>
 
-## Instalaci贸n
+## Instalaci髇
 
 ::: code-group
 ```powershell [Windows]
@@ -41,6 +82,30 @@ curl -sSfL https://ps2build.dev/install.sh | sh
 ```
 :::
 
-## Siguientes pasos
+<FeatureSection index="01" title="Multiplataforma" text="Funciona de forma nativa en Windows, Linux y macOS.">
+<OsTiles />
+</FeatureSection>
 
-<LinkGrid :items="links" />
+<FeatureSection index="02" title="Aut髇omo" text="Se instala en su propio directorio y funciona en tu sistema operativo.">
+
+- Sin Docker
+- Sin configuraci髇 manual del entorno
+- Toolchain y paquetes instalados y actualizados por `ps2build`
+
+</FeatureSection>
+
+<FeatureSection index="03" title="Definiciones de build simples" wide text="Un Makefile que incluye reglas compartidas y lista rutas de include, rutas de bibliotecas y flags -l se convierte en un 鷑ico ps2.yaml. Los paquetes indicados en libs: aportan sus headers y flags de enlazado.">
+<HomeShowcase :before="before" :after="after" />
+</FeatureSection>
+
+<FeatureSection index="04" title="Soporte de editores" text="compile_commands.json viene incluido. Funciona en la mayor韆 de editores.">
+<EditorTiles />
+</FeatureSection>
+
+<div class="home-end">
+<HomeShowcase :actions="actions" :links="links" />
+</div>
+
+<style>
+.home-end { margin-top: 56px; padding-top: 56px; border-top: 1px solid var(--vp-c-divider); }
+</style>
