@@ -4,6 +4,14 @@
   --vp-c-brand-3: #1d5b76;
   --vp-c-brand-soft: rgba(29, 91, 118, 0.14);
   --vp-home-hero-name-color: #1d5b76;
+  --vp-c-tile-1: #b9d9e6;
+  --vp-c-tile-2: #7fb5cc;
+  --vp-c-tile-3: #3f8aa8;
+  --vp-c-tile-4: #1d5b76;
+  --vp-home-hero-glow: rgba(29, 91, 118, 0.1);
+  --vp-home-hero-overlay:
+    linear-gradient(180deg, rgba(36, 41, 47, 0.08) 0%, rgba(36, 41, 47, 0) 34%),
+    radial-gradient(circle at 78% 18%, rgba(29, 91, 118, 0.08), transparent 26%);
 }
 
 .dark {
@@ -12,6 +20,14 @@
   --vp-c-brand-3: #1d5b76;
   --vp-c-brand-soft: rgba(111, 180, 210, 0.16);
   --vp-home-hero-name-color: #e2d3cc;
+  --vp-c-tile-1: #12303d;
+  --vp-c-tile-2: #1d5b76;
+  --vp-c-tile-3: #3f8aa8;
+  --vp-c-tile-4: #6fb4d2;
+  --vp-home-hero-glow: rgba(111, 180, 210, 0.16);
+  --vp-home-hero-overlay:
+    linear-gradient(180deg, rgba(1, 4, 9, 0.92) 0%, rgba(13, 17, 23, 0.62) 18%, rgba(13, 17, 23, 0) 52%),
+    radial-gradient(circle at 78% 18%, rgba(111, 180, 210, 0.1), transparent 24%);
 }
 
 .VPHero .image-src {
@@ -29,4 +45,14 @@
   --vp-c-green-2: var(--vp-c-brand-2);
   --vp-c-green-3: var(--vp-c-brand-3);
   --vp-c-green-soft: var(--vp-c-brand-soft);
+}
+
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
+.VPNavBarTranslations::before {
+  display: none;
 }

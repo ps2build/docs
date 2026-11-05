@@ -18,15 +18,53 @@ hero:
 ---
 
 <script setup>
-import LinkGrid from './.vitepress/components/LinkGrid.vue'
+import HomeShowcase from './.vitepress/components/HomeShowcase.vue'
+
+const before = {
+  title: 'ps2sdk Makefile',
+  code: `EE_BIN = my-game.elf
+EE_OBJS = main.o
+EE_INCS += -I$(PS2SDK)/ports/include
+EE_LDFLAGS += -L$(PS2SDK)/ports/lib
+EE_LIBS += -lpng -lz -lfreetype -lgskit -ldmakit
+
+all: $(EE_BIN)
+
+clean:
+	rm -f $(EE_BIN) $(EE_OBJS)
+
+include $(PS2SDK)/samples/Makefile.pref
+include $(PS2SDK)/samples/Makefile.eeglobal`,
+}
+
+const after = {
+  title: 'ps2.yaml',
+  code: `project: my-game
+
+targets:
+  - name: my-game
+    type: ee
+    sources: [main.c]
+    libs: [png, freetype, gskit, dmakit]`,
+}
+
+const platformsLabel = 'Works on'
+const platforms = [
+  { id: 'windows', name: 'Windows' },
+  { id: 'linux', name: 'Linux' },
+  { id: 'macos', name: 'macOS' },
+]
+
+const actions = [
+  { text: 'Start building', link: '/guide/getting-started', primary: true },
+  { text: 'Migrating from ps2sdk', link: '/guide/migration' },
+]
 
 const links = [
-  { title: 'Getting started', text: 'Create and build a project', link: '/guide/getting-started' },
-  { title: 'ps2.yaml', text: 'The build definition format', link: '/guide/ps2-yaml' },
-  { title: 'Packages', text: 'Libraries and drivers, and how libs: resolves them', link: '/guide/packages' },
-  { title: 'LLVM toolchain', text: 'Build with clang instead of GCC (beta)', link: '/guide/llvm' },
-  { title: 'PS2 architecture', text: 'How the hardware fits together', link: '/guide/architecture/introduction' },
-  { title: 'API reference', text: 'Coming soon', link: '/api/' },
+  { text: 'ps2.yaml reference', link: '/guide/ps2-yaml' },
+  { text: 'Packages', link: '/guide/packages' },
+  { text: 'LLVM toolchain', link: '/guide/llvm' },
+  { text: 'PS2 architecture', link: '/guide/architecture/introduction' },
 ]
 </script>
 
@@ -62,6 +100,6 @@ targets:
     libs: [png, freetype, gskit, dmakit]
 ```
 
-## Where to go next
+## Less to write
 
-<LinkGrid :items="links" />
+<HomeShowcase :before="before" :after="after" :platforms-label="platformsLabel" :platforms="platforms" :actions="actions" :links="links" />

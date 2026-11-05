@@ -195,6 +195,9 @@ export default defineConfigWithTheme<ThemeConfig>({
     search: {
       provider: 'local',
     },
+    footer: {
+      copyright: 'Made with ❤️ by <a href="https://github.com/techwritescode">techwritescode</a>',
+    },
   },
 
   sitemap: {
