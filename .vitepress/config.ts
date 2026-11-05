@@ -59,13 +59,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       themeConfig: {
         nav: [
           { text: 'Guide', link: '/guide/getting-started' },
-          {
-            text: 'API Reference',
-            items: [
-              { text: 'sdk-core', link: '/api/sdk-core/', target: '_self' },
-              { text: 'sdk-world', link: '/api/sdk-world/', target: '_self' },
-            ],
-          },
+          { text: 'API Reference', link: '/api/' },
           { text: 'ps2build', link: 'https://github.com/ps2build/ps2build' },
           { text: 'All repos', link: 'https://github.com/ps2build' },
         ],
@@ -111,13 +105,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       themeConfig: {
         nav: [
           { text: 'Guía', link: '/es/guide/getting-started' },
-          {
-            text: 'Referencia de API',
-            items: [
-              { text: 'sdk-core', link: '/api/sdk-core/', target: '_self' },
-              { text: 'sdk-world', link: '/api/sdk-world/', target: '_self' },
-            ],
-          },
+          { text: 'Referencia de API', link: '/es/api/' },
           { text: 'ps2build', link: 'https://github.com/ps2build/ps2build' },
           { text: 'Todos los repos', link: 'https://github.com/ps2build' },
         ],
@@ -163,13 +151,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       themeConfig: {
         nav: [
           { text: 'Guia', link: '/pt-br/guide/getting-started' },
-          {
-            text: 'Referência de API',
-            items: [
-              { text: 'sdk-core', link: '/api/sdk-core/', target: '_self' },
-              { text: 'sdk-world', link: '/api/sdk-world/', target: '_self' },
-            ],
-          },
+          { text: 'Referência de API', link: '/pt-br/api/' },
           { text: 'ps2build', link: 'https://github.com/ps2build/ps2build' },
           { text: 'Todos os repos', link: 'https://github.com/ps2build' },
         ],

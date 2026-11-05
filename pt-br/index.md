@@ -26,7 +26,7 @@ const links = [
   { title: 'Pacotes', text: 'Bibliotecas e drivers, e como libs: os resolve', link: '/pt-br/guide/packages' },
   { title: 'Toolchain LLVM', text: 'Compile com clang em vez de GCC (beta)', link: '/guide/llvm' },
   { title: 'Arquitetura do PS2', text: 'Como o hardware se encaixa', link: '/pt-br/guide/architecture/introduction' },
-  { title: 'Referência da API', text: 'Cabeçalhos de sdk-core e sdk-world', link: '/api/sdk-core/' },
+  { title: 'Referência da API', text: 'Em breve', link: '/pt-br/api/' },
 ]
 </script>
 
@@ -42,6 +42,8 @@ curl -sSfL https://raw.githubusercontent.com/ps2build/install/master/install.sh 
 :::
 
 ## Primeiro build
+
+Em uma pasta nova, execute:
 
 ```shell
 ps2build init

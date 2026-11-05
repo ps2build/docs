@@ -26,7 +26,7 @@ const links = [
   { title: 'Paquetes', text: 'Bibliotecas y drivers, y cómo los resuelve libs:', link: '/es/guide/packages' },
   { title: 'Toolchain LLVM', text: 'Compila con clang en lugar de GCC (beta)', link: '/guide/llvm' },
   { title: 'Arquitectura de PS2', text: 'Cómo encaja el hardware', link: '/es/guide/architecture/introduction' },
-  { title: 'Referencia de la API', text: 'Cabeceras de sdk-core y sdk-world', link: '/api/sdk-core/' },
+  { title: 'Referencia de la API', text: 'Próximamente', link: '/es/api/' },
 ]
 </script>
 
@@ -42,6 +42,8 @@ curl -sSfL https://raw.githubusercontent.com/ps2build/install/master/install.sh 
 :::
 
 ## Primera compilación
+
+En una carpeta nueva, ejecuta:
 
 ```shell
 ps2build init
