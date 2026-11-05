@@ -1,0 +1,27 @@
+var ftcolor_8h =
+[
+    [ "FT_Color_", "struct_f_t___color__.html", null ],
+    [ "FT_Palette_Data_", "struct_f_t___palette___data__.html", null ],
+    [ "FT_LayerIterator_", "struct_f_t___layer_iterator__.html", null ],
+    [ "FT_ColorStopIterator_", "struct_f_t___color_stop_iterator__.html", null ],
+    [ "FT_ColorIndex_", "struct_f_t___color_index__.html", null ],
+    [ "FT_ColorStop_", "struct_f_t___color_stop__.html", null ],
+    [ "FT_ColorLine_", "struct_f_t___color_line__.html", null ],
+    [ "FT_Affine_23_", "struct_f_t___affine__23__.html", null ],
+    [ "FT_Opaque_Paint_", "struct_f_t___opaque___paint__.html", null ],
+    [ "FT_PaintColrLayers_", "struct_f_t___paint_colr_layers__.html", null ],
+    [ "FT_PaintSolid_", "struct_f_t___paint_solid__.html", null ],
+    [ "FT_PaintLinearGradient_", "struct_f_t___paint_linear_gradient__.html", null ],
+    [ "FT_PaintRadialGradient_", "struct_f_t___paint_radial_gradient__.html", null ],
+    [ "FT_PaintSweepGradient_", "struct_f_t___paint_sweep_gradient__.html", null ],
+    [ "FT_PaintGlyph_", "struct_f_t___paint_glyph__.html", null ],
+    [ "FT_PaintColrGlyph_", "struct_f_t___paint_colr_glyph__.html", null ],
+    [ "FT_PaintTransform_", "struct_f_t___paint_transform__.html", null ],
+    [ "FT_PaintTranslate_", "struct_f_t___paint_translate__.html", null ],
+    [ "FT_PaintScale_", "struct_f_t___paint_scale__.html", null ],
+    [ "FT_PaintRotate_", "struct_f_t___paint_rotate__.html", null ],
+    [ "FT_PaintSkew_", "struct_f_t___paint_skew__.html", null ],
+    [ "FT_PaintComposite_", "struct_f_t___paint_composite__.html", null ],
+    [ "FT_COLR_Paint_", "struct_f_t___c_o_l_r___paint__.html", "struct_f_t___c_o_l_r___paint__" ],
+    [ "FT_ClipBox_", "struct_f_t___clip_box__.html", null ]
+];

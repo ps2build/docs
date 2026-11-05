@@ -1,0 +1,9 @@
+[
+  { "name": "audsrv", "url": "https://git.techwritescode.dev/ps2/audsrv/releases" },
+  { "name": "jpeg", "url": "https://git.techwritescode.dev/ps2/libjpeg-turbo/releases" },
+  { "name": "ogg", "url": "https://git.techwritescode.dev/ps2/ogg/releases" },
+  { "name": "ps2_drivers", "url": "https://git.techwritescode.dev/ps2/ps2_drivers/releases" },
+  { "name": "ps2gl", "url": "https://git.techwritescode.dev/ps2/ps2gl/releases" },
+  { "name": "ps2stuff", "url": "https://git.techwritescode.dev/ps2/ps2stuff/releases" },
+  { "name": "vorbis", "url": "https://git.techwritescode.dev/ps2/vorbis/releases" }
+]
