@@ -1,5 +1,8 @@
 ---
 layout: home
+titleTemplate: false
+title: "PS2BUILD: Sistema de build e SDK para homebrew de PlayStation 2"
+description: "O PS2BUILD é um sistema de build e SDK para homebrew de PlayStation 2. Instale o toolchain, descreva seu projeto em um único ps2.yaml e compile no Windows, Linux ou macOS."
 
 hero:
   name: PS2BUILD
