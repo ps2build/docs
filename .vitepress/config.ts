@@ -1,4 +1,6 @@
-import { defineConfig } from 'vitepress'
+import { defineConfigWithTheme } from 'vitepress'
+import type { ThemeConfig } from 'vitepress-carbon'
+import baseConfig from 'vitepress-carbon/config'
 
 const guideItems = (t: Record<string, string>) => [
   { text: t.gettingStarted, link: '/guide/getting-started' },
@@ -30,7 +32,8 @@ const communityItems = (t: Record<string, string>) => [
   { text: 'PSU', link: '/guide/community/psu' },
 ]
 
-export default defineConfig({
+export default defineConfigWithTheme<ThemeConfig>({
+  extends: baseConfig,
   title: 'PS2BUILD SDK Documentation',
   description: 'Documentation for PS2 homebrew development',
   base: '/docs/',
