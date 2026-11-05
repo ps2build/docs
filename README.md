@@ -1,6 +1,6 @@
 # docs
 
-Source for the PS2 SDK documentation at [ps2.techwritescode.dev](https://ps2.techwritescode.dev), built with [VitePress](https://vitepress.dev/). English is the source of truth; every `guide/` page has a matching `es/` and `pt-br/` translation.
+Source for the PS2 SDK documentation at [ps2build.dev](https://ps2build.dev), built with [VitePress](https://vitepress.dev/). English is the source of truth; every `guide/` page has a matching `es/` and `pt-br/` translation.
 
 ## Development
 

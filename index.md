@@ -34,10 +34,10 @@ const links = [
 
 ::: code-group
 ```powershell [Windows]
-irm https://raw.githubusercontent.com/ps2build/install/master/install.ps1 | iex
+irm https://ps2build.dev/install.ps1 | iex
 ```
-```shell [Linux]
-curl -sSfL https://raw.githubusercontent.com/ps2build/install/master/install.sh | sh
+```shell [Linux / macOS]
+curl -sSfL https://ps2build.dev/install.sh | sh
 ```
 :::
 

@@ -36,12 +36,12 @@ export default defineConfigWithTheme<ThemeConfig>({
   extends: baseConfig,
   title: 'PS2BUILD',
   description: 'Documentation for PS2 homebrew development',
-  base: '/docs/',
+  base: '/',
   cleanUrls: true,
   srcExclude: ['README.md', 'CONTRIBUTING.md', 'SECURITY.md'],
 
   head: [
-    ['link', { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/docs/favicon.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/favicon.png' }],
     [
       'script',
       {
@@ -198,6 +198,6 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
 
   sitemap: {
-    hostname: 'https://ps2.techwritescode.dev'
+    hostname: 'https://ps2build.dev'
   }
 })
