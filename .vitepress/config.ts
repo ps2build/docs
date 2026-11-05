@@ -32,6 +32,11 @@ const communityItems = (t: Record<string, string>) => [
   { text: 'PSU', link: '/guide/community/psu' },
 ]
 
+const SITE = 'https://ps2build.dev'
+const OG_LOCALE: Record<string, string> = { root: 'en_US', es: 'es_ES', 'pt-br': 'pt_BR' }
+const LOCALES = ['', '/es', '/pt-br']
+const HREFLANG: Record<string, string> = { '': 'en', '/es': 'es', '/pt-br': 'pt-BR' }
+
 export default defineConfigWithTheme<ThemeConfig>({
   extends: baseConfig,
   title: 'PS2BUILD',
@@ -42,6 +47,8 @@ export default defineConfigWithTheme<ThemeConfig>({
 
   head: [
     ['link', { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/favicon.png' }],
+    ['meta', { name: 'author', content: 'PS2BUILD' }],
+    ['meta', { name: 'keywords', content: 'PS2, PlayStation 2, homebrew, SDK, ps2build, ps2sdk, build system, LLVM, GCC' }],
     [
       'script',
       {
@@ -51,6 +58,37 @@ export default defineConfigWithTheme<ThemeConfig>({
       },
     ],
   ],
+
+  transformHead({ pageData, siteData, title, description }) {
+    const route = '/' + pageData.relativePath.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '')
+    const url = SITE + (route.length > 1 ? route.replace(/\/$/, '') : '/')
+    const prefix = LOCALES.find((l) => l && (route === l + '/' || route.startsWith(l + '/'))) ?? ''
+    const key = prefix ? prefix.slice(1) : 'root'
+    const path = route.slice(prefix.length) || '/'
+    const isHome = pageData.frontmatter.layout === 'home'
+    const pageTitle = isHome ? siteData.locales[key]?.title ?? siteData.title : title
+    const desc = pageData.frontmatter.description ?? description
+    const tags: [string, Record<string, string>][] = [
+      ['link', { rel: 'canonical', href: url }],
+      ['meta', { property: 'og:type', content: isHome ? 'website' : 'article' }],
+      ['meta', { property: 'og:site_name', content: 'PS2BUILD' }],
+      ['meta', { property: 'og:title', content: pageTitle }],
+      ['meta', { property: 'og:description', content: desc }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { property: 'og:locale', content: OG_LOCALE[key] }],
+      ['meta', { property: 'og:image', content: `${SITE}/icon.png` }],
+      ['meta', { name: 'twitter:card', content: 'summary' }],
+      ['meta', { name: 'twitter:title', content: pageTitle }],
+      ['meta', { name: 'twitter:description', content: desc }],
+      ['meta', { name: 'twitter:image', content: `${SITE}/icon.png` }],
+      ['meta', { name: 'theme-color', content: '#1d5b76' }],
+    ]
+    for (const l of LOCALES) {
+      const href = SITE + (l + path === '/' ? '/' : (l + path).replace(/\/$/, ''))
+      tags.push(['link', { rel: 'alternate', hreflang: HREFLANG[l], href }])
+    }
+    return tags
+  },
 
   locales: {
     root: {
