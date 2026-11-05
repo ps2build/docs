@@ -1,90 +1,77 @@
 # Introdução à arquitetura do PS2 <Badge type="warning" text="beta" />
 
-> Seção nova, escrita à mão - veja a nota na [folha de referência](/pt-br/guide/architecture/cheat-sheet).
+> Esta seção está em beta. Veja a nota na [folha de referência](/pt-br/guide/architecture/cheat-sheet).
 
-O PS2 não é um único processador - são vários, cada um com sua própria
-memória e seu próprio trabalho, conversando entre si através de
-alguns poucos elos estreitos. Quase toda estranheza em como este SDK
-está organizado (por que um pacote "pad" do lado EE tem um pacote
-"padman" separado do lado IOP, por que `dmakit` existe, por que som e
-rede parecem acontecer em outro lugar) vem diretamente dessa forma de
-hardware. Esta página é o mapa; as páginas seguintes vão um nível mais
-fundo em cada peça.
+O PS2 tem vários processadores, cada um com sua própria memória, conectados por alguns
+barramentos estreitos. Esta página os lista junto com os pacotes do SDK que visam cada um.
+As páginas seguintes tratam de cada parte.
 
-## As duas CPUs
+## CPUs
 
-**A Emotion Engine (EE)** é o processador principal - uma CPU de
-128 bits baseada em MIPS com duas **Vector Units** acopladas (VU0,
-fortemente acoplada à própria EE, e VU1, que roda principalmente por
-conta própria alimentando o GS). É aqui que roda a lógica do seu
-jogo, a maior parte da sua `main()`, e qualquer código que você
-escrever contra os targets `ee`/`ee_lib` no `ps2.yaml`.
+**O Emotion Engine (EE)** é o processador principal, uma CPU de 128 bits
+baseada em MIPS com duas **Vector Units** conectadas (VU0, fortemente acoplada
+ao próprio EE, e VU1, que roda quase sempre por conta própria alimentando o GS). É
+aqui que roda a lógica do seu jogo, a maior parte do seu `main()` e qualquer código que você escreva
+para os targets `ee`/`ee_lib` do `ps2.yaml`.
 
-**O IOP (I/O Processor)** é uma segunda CPU MIPS bem mais simples -
-descendente da que vinha no PlayStation original, aliás, e é por isso
-que o PS2 também consegue rodar discos de PS1. Ele não roda a lógica
-do seu jogo; roda um pequeno kernel que carrega módulos realocáveis
-(arquivos **IRX** - `.irx` está para o IOP mais ou menos como `.elf`
-está para a EE) e faz a mediação do acesso a quase todo periférico:
-as portas de controle, os cartões de memória, o drive de CD/DVD, o
-adaptador de rede, o som. É para isso que compilam os targets
-`iop`/`iop_lib` no `ps2.yaml`.
+**O IOP (I/O Processor)** é uma segunda CPU MIPS, mais simples, derivada da do PlayStation original,
+e é por isso que o PS2 lê discos de PS1. Ele não roda a
+lógica do jogo. Roda um kernel pequeno que carrega módulos relocáveis
+(arquivos **IRX** - `.irx` é para o IOP mais ou menos o que `.elf` é para o
+EE) e intermedia o acesso a quase todos os periféricos: as portas de
+controle, os cartões de memória, a unidade de CD/DVD, o adaptador de rede e o som.
+É para isto que compilam os targets `iop`/`iop_lib` do `ps2.yaml`.
 
-Por que dividir a máquina assim? Porque nenhum desses periféricos está
-ligado diretamente à EE - todos são hardware do lado IOP, e a EE tem
-que passar pelo IOP para alcançar qualquer um deles. Esse único fato
-explica a maior parte da forma dos pacotes do SDK: uma funcionalidade
-real e funcional normalmente precisa do equivalente a um pacote de
-código rodando em cada processador, cooperando entre si.
+Nenhum desses periféricos está ligado ao EE. Todos são
+hardware do lado do IOP, e o EE os alcança através do IOP.
+Um recurso normalmente precisa de um pacote em cada processador.
 
-## A ponte: SIF
+## SIF
 
-A EE e o IOP não compartilham memória. O **SIF** (Sub-system
-InterFace) é o elo de hardware entre eles, e os pacotes
-`sifman`/`sifcmd` do PS2SDK são o software construído em cima dele -
-um mecanismo RPC (remote procedure call) que permite que código da EE
-peça a um módulo do IOP para fazer algo e receber um resultado de
-volta. Veja [EE, IOP e SIF](/pt-br/guide/architecture/ee-iop-sif) para
-como isso realmente aparece em código, e por que tantos pacotes vêm em
-pares EE-cliente/IOP-driver combinados (`pad`+`padman`,
-`mc`+`mcman`, `netman` do lado IOP combinado com `ps2ip` do lado EE).
+O EE e o IOP não compartilham memória. O **SIF** (Sub-system InterFace)
+é o enlace de hardware entre eles, e os pacotes `sifman`/`sifcmd` do PS2SDK
+são o software construído sobre ele - um mecanismo de RPC
+(remote procedure call) que permite ao código EE pedir a um módulo IOP que
+faça algo e receber um resultado. Veja
+[EE, IOP e SIF](/pt-br/guide/architecture/ee-iop-sif) para ver como isso
+aparece no código, e por que tantos pacotes vêm em pares
+cliente EE/driver IOP (`pad`+`padman`, `mc`+`mcman`, `netman` no
+lado IOP emparelhado com `ps2ip` no lado EE).
 
-## O chip gráfico: GS
+## GS
 
-O **Graphics Synthesizer (GS)** é seu próprio chip com sua própria
-memória de vídeo local (eDRAM) - a EE não consegue ler ou escrever a
-memória do GS diretamente do jeito que consegue com a RAM principal.
-Em vez disso, a EE monta um fluxo de comandos de desenho e escritas
-de registrador (um **pacote GIF**) e o entrega, quase sempre via
-**DMA** em vez da CPU copiá-lo byte a byte. Veja
-[Graphics Synthesizer](/pt-br/guide/architecture/graphics-synthesizer).
+O **Graphics Synthesizer (GS)** é um chip próprio com sua própria
+memória de vídeo local (eDRAM). O EE não pode ler nem escrever na memória do GS diretamente
+como faz com a RAM principal. Em vez disso, o EE monta um fluxo de comandos de desenho
+e escritas de registradores (um **pacote GIF**) e o entrega,
+quase sempre por **DMA** em vez de copiá-lo com a CPU.
+Veja [Graphics Synthesizer](/pt-br/guide/architecture/graphics-synthesizer).
 
-## Movendo dados sem a CPU: DMA
+## DMA
 
-Como a EE, o GS, a VU1, e o elo SIF com o IOP são todos destinos
-separados, o PS2 tem dez **canais DMA** dedicados para mover dados
-entre eles enquanto a CPU faz outra coisa completamente diferente.
-`dmakit` é o wrapper deste SDK para construir e enfileirar esse
-trabalho. Veja [DMA](/pt-br/guide/architecture/dma).
+Como o EE, o GS, a VU1 e o enlace SIF com o IOP são
+destinos separados, o PS2 tem dez **canais de DMA** dedicados para
+mover dados entre eles enquanto a CPU faz outro trabalho.
+`dmakit` é o wrapper deste SDK para montar e enfileirar esse trabalho.
+Veja [DMA](/pt-br/guide/architecture/dma).
 
-## Som e armazenamento: também do lado IOP
+## Som e armazenamento
 
-**SPU2** (o chip de som) e o drive de **CD/DVD** são ambos alcançados
-através do IOP, do mesmo jeito que controles e cartões de memória -
-não existe um caminho direto EE-para-SPU2 nem EE-para-drive. Veja
+O **SPU2** (o chip de som) e a **unidade de CD/DVD** são alcançados
+através do IOP, como controles e cartões de memória. Não há
+caminho direto do EE para o SPU2 nem para a unidade. Veja
 [Áudio](/pt-br/guide/architecture/audio) e
 [Armazenamento](/pt-br/guide/architecture/storage).
 
-## Rede: duas arquiteturas concorrentes
+## Rede
 
-O adaptador de rede (DEV9/SMAP) também é hardware do lado IOP, mas
-este SDK traz duas formas diferentes de expô-lo - uma onde a pilha
-TCP/IP de verdade roda na EE e o IOP só encaminha pacotes
-(`netman`+`ps2ip`), e outra onde a pilha inteira roda do lado IOP
-(`ps2ip-nm`+`smap-ps2ip`). Elas não são intercambiáveis e não podem
-rodar ao mesmo tempo. Veja [Rede](/pt-br/guide/architecture/networking).
+O adaptador de rede (DEV9/SMAP) também é hardware do lado do IOP, mas este SDK
+oferece duas formas de usá-lo: a pilha TCP/IP roda no EE e o IOP encaminha pacotes
+(`netman`+`ps2ip`), ou a pilha inteira roda no IOP
+(`ps2ip-nm`+`smap-ps2ip`). Elas não são intercambiáveis e não podem rodar ao
+mesmo tempo. Veja [Rede](/pt-br/guide/architecture/networking).
 
-## Para onde ir depois
+## Próximas páginas
 
 - [Graphics Synthesizer](/pt-br/guide/architecture/graphics-synthesizer)
 - [DMA](/pt-br/guide/architecture/dma)

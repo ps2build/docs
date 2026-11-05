@@ -1,25 +1,20 @@
 # Controles <Badge type="warning" text="beta" />
 
-> Seção nova, escrita à mão - veja a nota na [folha de referência](/pt-br/guide/architecture/cheat-sheet).
+> Esta seção está em beta. Veja a nota na [folha de referência](/pt-br/guide/architecture/cheat-sheet).
 
-Todo periférico de porta de controle - gamepads, multitaps, e (no
-que diz respeito ao hardware) cartões de memória também -
-compartilham um único barramento físico: **SIO2**, uma interface
-serial que pertence ao IOP. Essa é mais uma instância do padrão de
-[EE, IOP e SIF](/pt-br/guide/architecture/ee-iop-sif): uma biblioteca
-cliente do lado EE, conversando via SIF com um driver IOP, que é a
-única coisa que de fato toca o hardware.
+Os periféricos das portas de controle (gamepads, multitaps e cartões de memória) compartilham um barramento físico:
+o **SIO2**, uma interface serial controlada pelo IOP. Eles seguem o padrão de
+[EE, IOP e SIF](/pt-br/guide/architecture/ee-iop-sif): uma
+biblioteca cliente do lado EE conversa por SIF com um driver IOP, que é o
+único código que acessa o hardware.
 
-## Um barramento, vários drivers em cima
+## Dispositivos SIO2
 
-`sio2man` (core) é o driver do lado IOP para o próprio barramento
-SIO2 - "não existe caminho mais primitivo," nas próprias palavras
-deste SDK. `padman`, `mtapman` (multitap), e os drivers de cartão de
-memória (veja [Armazenamento](/pt-br/guide/architecture/storage)) são
-todos módulos IOP separados que ficam em cima dele, cada um dono de
-um tipo de dispositivo nesse barramento compartilhado. Do lado EE,
-`pad`, `mtap`, e `mc` são os clientes RPC correspondentes que seu
-código de jogo de fato chama.
+`sio2man` (core) é o driver do lado IOP para o barramento SIO2. `padman`,
+`mtapman` (multitap) e os drivers de cartão de memória (veja
+[Armazenamento](/pt-br/guide/architecture/storage)) são módulos IOP separados
+que ficam sobre ele, cada um responsável por um tipo de dispositivo no barramento. No lado EE, `pad`, `mtap` e `mc` são os clientes
+RPC correspondentes que o código do seu jogo chama.
 
 | Dispositivo | Cliente do lado EE | Driver do lado IOP |
 |---|---|---|
@@ -29,24 +24,19 @@ código de jogo de fato chama.
 | Teclado | `kbd` | (seu próprio driver USB do IOP) |
 | Controle remoto infravermelho | `rm` | `rmman` |
 
-`padman`/`mtapman`/os drivers de cartão de memória são carregados
-automaticamente como parte de um programa EE normal usando
-`pad`/`mtap`/`mc` - você normalmente não carrega o lado IOP à mão do
-jeito que poderia fazer para um driver menos comum.
+`padman`/`mtapman`/os drivers de cartão de memória são carregados automaticamente quando um programa EE usa `pad`, `mtap` ou `mc`.
 
-## Dispositivos USB são um caminho separado
+## Dispositivos USB
 
-Teclados, mouses, e armazenamento em massa USB não passam pelo SIO2
-de forma alguma - são alcançados através da própria pilha USB do IOP
-(`usbd` e companhia), um caminho de hardware completamente separado
-das portas de controle. A API do lado EE do `kbd` parece com a do
-`pad` (cliente RPC para um driver IOP), mas por baixo ela está
-conversando com módulos IOP USB, não com módulos SIO2.
+Teclados, mouses e armazenamento USB não usam o SIO2. Eles são
+alcançados pela pilha USB do IOP (`usbd` e módulos relacionados), um
+caminho de hardware separado das portas de controle. A API do lado EE do `kbd`
+lembra a do `pad` (um cliente RPC para um driver IOP), mas
+conversa com módulos IOP de USB.
 
 ## Veja também
 
-- [EE, IOP e SIF](/pt-br/guide/architecture/ee-iop-sif) - o padrão
-  RPC que todo um desses clientes usa
-- [Armazenamento](/pt-br/guide/architecture/storage) - o cartão de
-  memória como dispositivo de armazenamento, não só como periférico
-  SIO2
+- [EE, IOP e SIF](/pt-br/guide/architecture/ee-iop-sif) - o padrão de RPC
+  usado por todos esses clientes
+- [Armazenamento](/pt-br/guide/architecture/storage) - cartões de memória como
+  dispositivos de armazenamento

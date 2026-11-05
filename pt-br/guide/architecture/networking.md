@@ -1,82 +1,68 @@
 # Rede <Badge type="warning" text="beta" />
 
-> Seção nova, escrita à mão - veja a nota na [folha de referência](/pt-br/guide/architecture/cheat-sheet).
+> Esta seção está em beta. Veja a nota na [folha de referência](/pt-br/guide/architecture/cheat-sheet).
 
-O adaptador de rede (hardware DEV9/SMAP) é do lado IOP, assim como
-tudo mais até agora - mas rede é a única área deste SDK onde
-genuinamente existem **duas arquiteturas diferentes e mutuamente
-exclusivas** para alcançá-lo, não uma camada única e clara. Escolher
-a errada para o que você está fazendo é a forma mais comum de ficar
-travado aqui.
+O adaptador de rede (hardware DEV9/SMAP) fica no lado do IOP, como os
+demais periféricos. O SDK tem **duas arquiteturas
+mutuamente exclusivas** para usá-lo.
 
-## Arquitetura A: TCP/IP do lado EE, o IOP só encaminha
+## Arquitetura A: TCP/IP no EE
 
-- **`dev9`** (core) - o driver de baixo nível para o hardware da
-  baía de expansão DEV9 na qual o adaptador de rede se conecta.
-- **`smap`** (core, compilado em "modo NETMAN") - o driver PHY/MAC
-  Ethernet de fato, do lado IOP.
-- **`netman`** (core) - um módulo gerenciador de *interface de rede*
-  do lado IOP através do qual o `smap` reporta o status do link, com
-  um cliente RPC do lado EE de mesmo nome.
-- **`ps2ip`** (core) - a pilha TCP/IP de fato (um lwIP embutido),
-  rodando **na EE**. Sockets, DHCP, DNS - tudo código do lado EE;
-  `netman`/`smap` só colocam e tiram frames brutos do cabo para ela.
+- **`dev9`** (core) - o driver do hardware da baia de expansão
+  DEV9 na qual o adaptador de rede se conecta.
+- **`smap`** (core, compilado no modo NETMAN) - o driver Ethernet
+  PHY/MAC, do lado IOP.
+- **`netman`** (core) - um módulo gerenciador de interface de rede do lado IOP
+  por meio do qual o `smap` reporta o estado do enlace, com um cliente RPC do lado EE
+  de mesmo nome.
+- **`ps2ip`** (core) - a pilha TCP/IP (lwIP), rodando
+  **no EE**. Sockets, DHCP e DNS são código do lado EE. `netman` e `smap`
+  movem frames brutos de e para a rede.
 
-Essa é a arquitetura que o próprio teste de fumaça `scratch/nettest`
-deste SDK usa (embute `dev9`+`netman`+`smap`, linka
-`ps2ip`+`netman` do lado EE): carrega os módulos IOP, sobe o DHCP
-através do próprio `ps2ip_setconfig()` do `ps2ip`, depois usa
-chamadas `socket()`/`connect()`/`send()`/`recv()` de aparência normal
-a partir de código EE.
+Para usá-la, embuta `dev9`, `netman` e `smap`, e linke `ps2ip` e `netman` no EE.
+Carregue os módulos IOP, suba o DHCP com `ps2ip_setconfig()` e então use
+`socket()`, `connect()`, `send()` e `recv()` a partir do código EE.
 
-::: warning Uma pegadinha real e não óbvia
-O próprio `lwipopts.h` do `ps2ip` desabilita deliberadamente os
-aliases POSIX `close`/`read`/`write`
-(`LWIP_POSIX_SOCKETS_IO_NAMES` está desligado), então a função real de
-fechar um socket é `lwip_close()`, não `close()` - um `close()` puro
-não vai compilar. Isso é intencional: esses nomes genéricos, de outra
-forma, sobrepairiam a E/S de arquivo real em outra parte do mesmo
-programa.
+::: warning Aliases POSIX
+O `lwipopts.h` do `ps2ip` desabilita os aliases POSIX `close`, `read` e
+`write` (`LWIP_POSIX_SOCKETS_IO_NAMES` está desligado). Feche um
+socket com `lwip_close()`. Um `close()` simples
+não compila. Os aliases são desabilitados porque esses nomes genéricos
+ofuscariam a E/S de arquivos em outras partes do programa.
 :::
 
-## Arquitetura B: a pilha inteira roda no IOP
+## Arquitetura B: a pilha inteira no IOP
 
-- **`smap-ps2ip`** (core) - o *mesmo* código-fonte do driver SMAP que
-  o `smap` acima, compilado em um modo diferente (`SMAP_PS2IP=1` em
-  vez de `SMAP_NETMAN`) - ele conversa diretamente com uma pilha
-  lwIP residente no IOP em vez de passar pelo `netman`.
-- **`ps2ip-nm`** (core) - um pacote genuinamente separado do `ps2ip`
-  do lado EE: a compilação *residente no IOP* do mesmo código-fonte
-  lwIP. Nada roda na EE aqui - sockets, DHCP, a pilha inteira vive no
-  IOP.
-- Módulos IOP que querem seu próprio acesso de rede sem envolver a
-  EE se constroem diretamente sobre isso - **`http`** (um driver de
-  sistema de arquivos cliente HTTP somente leitura que registra um
-  dispositivo `http:`) é o exemplo real neste SDK.
+- **`smap-ps2ip`** (core) - o mesmo código-fonte do driver SMAP que o `smap`,
+  compilado em outro modo (`SMAP_PS2IP=1` em vez de
+  `SMAP_NETMAN`). Ele conversa diretamente com uma pilha lwIP residente no IOP,
+  em vez de passar pelo `netman`.
+- **`ps2ip-nm`** (core) - um pacote separado do `ps2ip`
+  do lado EE: o build residente no IOP do mesmo código-fonte do lwIP. Nada
+  roda no EE. Sockets, DHCP e a pilha inteira ficam no IOP.
+- Módulos IOP que precisam de acesso à rede sem o EE
+  são construídos sobre isto. O **`http`** (um driver de sistema de arquivos cliente
+  HTTP somente leitura que registra um dispositivo `http:`) é o
+  exemplo neste SDK.
 
-**Essas duas arquiteturas não podem rodar ao mesmo tempo** - `smap` e
-`smap-ps2ip` ambas reivindicam a mesma placa de rede física, então é
-uma ou outra para um dado programa em execução.
+**As duas arquiteturas não podem rodar ao mesmo tempo.** `smap` e
+`smap-ps2ip` usam a mesma NIC, então um programa usa uma ou a
+outra.
 
-Subir o DHCP para essa arquitetura não tem um caminho estabelecido e
-exposto por RPC a partir do lado EE do jeito que o `netman` fornece
-para a arquitetura A - o que quer que chame o equivalente de
-`ps2ip_setconfig()` aqui precisa rodar diretamente no IOP junto com a
-própria pilha. Esse é um terreno genuinamente menos percorrido neste
-SDK do que a arquitetura A.
+O EE não tem um caminho RPC para subir o DHCP nesta arquitetura, como o `netman` oferece na arquitetura A.
+O equivalente de `ps2ip_setconfig()` precisa rodar
+no IOP junto com a pilha.
 
-## Qual usar
+## Seleção
 
-Se o seu próprio jogo precisa de sockets (um cliente de lobby,
-telemetria, uma chamada HTTP a partir de código de jogo) -
-arquitetura A. Se você está escrevendo (ou reusando) um módulo IOP
-autocontido que quer acesso de rede sem expor nada à EE -
-arquitetura B, e espere fazer mais do trabalho de DHCP/inicialização
-você mesmo.
+| Requisito | Arquitetura |
+|---|---|
+| Sockets a partir de código EE | A |
+| Módulo IOP autônomo com acesso à rede e sem envolvimento do EE | B |
 
 ## Veja também
 
-- [EE, IOP e SIF](/pt-br/guide/architecture/ee-iop-sif) - o padrão
-  RPC que a divisão EE/IOP do `netman` segue
-- [Controles](/pt-br/guide/architecture/controllers)/[Armazenamento](/pt-br/guide/architecture/storage) -
-  outros pares cliente-EE/driver-IOP, para comparação
+- [EE, IOP e SIF](/pt-br/guide/architecture/ee-iop-sif) - o padrão de RPC
+  que a divisão EE/IOP do `netman` segue
+- [Controles](/pt-br/guide/architecture/controllers) e [Armazenamento](/pt-br/guide/architecture/storage) -
+  outros pares de cliente EE e driver IOP

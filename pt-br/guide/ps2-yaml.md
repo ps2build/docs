@@ -1,7 +1,6 @@
 # ps2.yaml
 
-A definição de build que o `ps2build` lê. Uma mínima, vinda do
-`ps2build init`:
+A definição de build que o `ps2build` lê. O `ps2build init` gera uma mínima:
 
 ```yaml
 project: my-game
@@ -17,26 +16,23 @@ targets:
 Todo target tem um `type`: `ee`, `iop`, `ee_lib`, ou `iop_lib`.
 
 - **`ee`** - um `.elf` inicializável. As bibliotecas padrão (kernel,
-  cglue, cdvd) já são linkadas automaticamente - liste apenas
-  bibliotecas *extras* em `libs:`. Defina `output_bin: true` para
+  cglue, cdvd) são linkadas automaticamente. Liste apenas
+  bibliotecas adicionais em `libs:`. Defina `output_bin: true` para
   também gerar um `.bin` plano, ou `pack: true` para gerar um
   `<name>-packed.elf` comprimido e autoextraível.
-- **`iop`** - um módulo `.irx` relocável. Linkado de forma especial
-  (`-nostdlib -dc -r`), stripped, e depois passado pela ferramenta
+- **`iop`** - um módulo `.irx` relocável. Linkado com
+  `-nostdlib -dc -r`, stripped e depois processado pelo
   `iopfixup`.
-- **`ee_lib` / `iop_lib`** - compila como um target `ee`/`iop` mas
-  arquiva em `lib<name>.a` em vez de linkar - nunca é linkado por si
-  só. Um target `ee` linka contra um `ee_lib` (e `iop` contra
-  `iop_lib`) listando o *nome* do target (não `lib<name>.a`) no seu
-  próprio `libs:`, junto com quaisquer nomes de bibliotecas externas,
-  na mesma lista - a ordem importa, já que a ordem de linkagem estática
-  é preservada exatamente como escrita.
+- **`ee_lib` / `iop_lib`** - compila como um target `ee` ou `iop` mas
+  gera `lib<name>.a` e não é linkado por si só.
+  Um target `ee` linka um `ee_lib` (e `iop` um
+  `iop_lib`) listando o nome do target, sem `lib<name>.a`, no seu
+  `libs:` junto com os nomes de bibliotecas externas. A ordem de linkagem é preservada
+  como escrita, então a ordem importa.
 
 O linkado final de um target `ee` muda automaticamente para o driver
-de linkagem de C++ sempre que suporte a runtime de C++ é necessário -
-suas próprias fontes contêm um arquivo `.cpp`/`.cc`/`.cxx`, ou ele
-linka um `ee_lib` que contém. Você nunca precisa fazer nada para
-ativar isso.
+de linkagem de C++ quando o target tem uma fonte `.cpp`, `.cc` ou `.cxx`, ou linka um
+`ee_lib` que tem. Nenhuma configuração é necessária.
 
 ## Incorporando um módulo IOP (`embed_irx`)
 
@@ -51,7 +47,7 @@ SifExecModuleBuffer(<name>_irx, size_<name>_irx, 0, NULL, NULL);
 ```
 
 Se dois targets `ee` incorporam o mesmo módulo `iop`, ele é compilado
-apenas uma vez e compartilhado.
+uma única vez.
 
 ## Campos
 
@@ -77,8 +73,7 @@ apenas uma vez e compartilhado.
 | `imports_lst` | target | Apenas `iop` - caminho para um arquivo `imports.lst` |
 | `exports_tab` | target | Apenas `iop` - caminho para um arquivo `exports.tab` |
 
-Garantido estar correto - o JSON Schema completo vem direto da própria
-ferramenta:
+A ferramenta imprime o JSON Schema completo:
 
 ```bash
 ps2build schema

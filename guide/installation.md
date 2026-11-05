@@ -9,13 +9,13 @@ curl -sSfL https://raw.githubusercontent.com/ps2build/install/master/install.sh 
 ```
 :::
 
-This installs the `ps2build` SDK and adds it to your path.
+This installs the SDK and adds `ps2build` to your `PATH`.
 
 - Windows `%LOCALAPPDATA%\ps2build`
 - Linux `~/.local/share/ps2build`
 
-See [ps2/install](https://github.com/ps2build/install) for install customization options.
+See [ps2build/install](https://github.com/ps2build/install) for installer options.
 
-::: warning Linux Support
-Non-GLIBC based distributions of Linux are not supported yet
+::: warning Linux support
+Distributions that do not use glibc are not supported.
 :::

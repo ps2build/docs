@@ -16,16 +16,14 @@ artifacts:
     lib: lib/libkernel.a
 ```
 
-Reference it from a `ps2.yaml` target the same way you'd reference a
-same-file `ee_lib`:
+Reference it from a `ps2.yaml` target the same way as an `ee_lib` defined in the same file:
 
 ```yaml
 libs: [kernel, png, freetype]
 ```
 
 `ps2build` resolves each name against `$PS2DEV/packages/{core,world}`,
-adds the package's `include_dirs` and archive to the build automatically
-- no hand-written `-I`/`-L` flags.
+adds the package's `include_dirs` and archive to the build. No `-I` or `-L` flags are needed.
 
 ## Artifact kinds
 
@@ -34,19 +32,15 @@ adds the package's `include_dirs` and archive to the build automatically
 - **`driver`** - a loadable `.irx` module (`irx:` instead of `lib:`),
   `iop` only.
 
-A package can declare both - e.g. a library half for the EE side and a
-driver half for the IOP side of the same real component, both
-resolvable by the same name.
+A package can declare both, for example a library for the EE and a driver for the IOP, resolved by the same name.
 
 ## Transitive headers and link order
 
 - **`headers:`** - names other packages whose headers this one's own
   sources need to compile. A consumer linking this package gets those
   include dirs too, without listing them itself.
-- **`links:`** - names other packages this one's archive was actually
-  linked against - a real build-order edge. A consumer linking this
-  package must also link everything named here, recursively, in an
+- **`links:`** - names other packages this one's archive links against. A consumer linking this
+  package also links everything named here, recursively, in an
   order a static linker accepts.
 
-Both are resolved automatically - you only ever write the top-level
-package name in your own `libs:`.
+Both are resolved automatically. List only the top-level package name in `libs:`.

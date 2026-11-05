@@ -4,7 +4,7 @@ layout: home
 hero:
   name: PS2BUILD
   text: SDK Homebrew
-  tagline: A toolchain de desenvolvimento para PlayStation 2 do futuro
+  tagline: Sistema de build e SDK para homebrew de PlayStation 2
   image:
     src: /logo.svg
     alt: PS2BUILD

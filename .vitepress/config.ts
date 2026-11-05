@@ -34,7 +34,7 @@ const communityItems = (t: Record<string, string>) => [
 
 export default defineConfigWithTheme<ThemeConfig>({
   extends: baseConfig,
-  title: 'PS2BUILD SDK Documentation',
+  title: 'PS2BUILD',
   description: 'Documentation for PS2 homebrew development',
   base: '/docs/',
   cleanUrls: true,
@@ -100,7 +100,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       label: 'Español',
       lang: 'es',
       link: '/es/',
-      title: 'PS2BUILD SDK',
+      title: 'PS2BUILD',
       description: 'Documentación para el desarrollo homebrew de PS2',
       themeConfig: {
         nav: [
@@ -146,7 +146,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       label: 'Português (BR)',
       lang: 'pt-BR',
       link: '/pt-br/',
-      title: 'PS2BUILD SDK',
+      title: 'PS2BUILD',
       description: 'Documentação para desenvolvimento homebrew de PS2',
       themeConfig: {
         nav: [

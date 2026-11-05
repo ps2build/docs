@@ -16,16 +16,15 @@ artifacts:
     lib: lib/libkernel.a
 ```
 
-Referéncialo desde un target de `ps2.yaml` de la misma forma en que
-referenciarías un `ee_lib` del mismo archivo:
+Referéncialo desde un target de `ps2.yaml` igual que un `ee_lib` definido en el mismo archivo:
 
 ```yaml
 libs: [kernel, png, freetype]
 ```
 
 `ps2build` resuelve cada nombre contra `$PS2DEV/packages/{core,world}`,
-y añade automáticamente los `include_dirs` y el archivo del paquete a
-la compilación - sin flags `-I`/`-L` escritos a mano.
+y añade los `include_dirs` y el archivo del paquete a
+la compilación. No hacen falta flags `-I` ni `-L`.
 
 ## Tipos de artefacto
 
@@ -35,9 +34,7 @@ la compilación - sin flags `-I`/`-L` escritos a mano.
 - **`driver`** - un módulo `.irx` cargable (`irx:` en lugar de `lib:`),
   solo `iop`.
 
-Un paquete puede declarar ambos - por ejemplo, una mitad de biblioteca
-para el lado EE y una mitad de driver para el lado IOP del mismo
-componente real, ambas resolubles por el mismo nombre.
+Un paquete puede declarar ambos, por ejemplo una biblioteca para el EE y un driver para el IOP, resueltos por el mismo nombre.
 
 ## Headers transitivos y orden de enlazado
 
@@ -45,11 +42,10 @@ componente real, ambas resolubles por el mismo nombre.
   propias fuentes de este para compilar. Un consumidor que enlaza este
   paquete también obtiene esos directorios de include, sin listarlos
   él mismo.
-- **`links:`** - nombra otros paquetes contra los que el archivo de
-  este realmente se enlazó - un edge real de orden de compilación. Un
-  consumidor que enlaza este paquete también debe enlazar todo lo
+- **`links:`** - nombra otros paquetes contra los que se enlaza el archivo de
+  este. Un
+  consumidor que enlaza este paquete también enlaza todo lo
   nombrado aquí, de forma recursiva, en un orden que un enlazador
   estático acepte.
 
-Ambos se resuelven automáticamente - solo escribes el nombre del
-paquete de nivel superior en tu propio `libs:`.
+Ambos se resuelven automáticamente. Lista solo el nombre del paquete de nivel superior en `libs:`.

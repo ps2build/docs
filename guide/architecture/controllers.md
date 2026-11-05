@@ -1,23 +1,20 @@
 # Controllers <Badge type="warning" text="beta" />
 
-> New, hand-written section - see the note on the [cheat sheet](/guide/architecture/cheat-sheet).
+> This section is in beta. See the note on the [cheat sheet](/guide/architecture/cheat-sheet).
 
-Every controller port peripheral - gamepads, multitaps, and (as far as
-the hardware is concerned) memory cards too - shares one physical bus:
-**SIO2**, a serial interface the IOP owns. This is another instance of
-the pattern from [EE, IOP, and SIF](/guide/architecture/ee-iop-sif): an
-EE-side client library, talking over SIF to an IOP driver, which is the
-only thing actually touching hardware.
+Controller port peripherals (gamepads, multitaps and memory cards) share one physical bus:
+**SIO2**, a serial interface the IOP owns. They follow the pattern in
+[EE, IOP, and SIF](/guide/architecture/ee-iop-sif): an
+EE-side client library talks over SIF to an IOP driver, which is the
+only code that accesses the hardware.
 
-## One bus, several drivers on top
+## SIO2 devices
 
-`sio2man` (core) is the IOP-side driver for the SIO2 bus itself - "no
-more primitive path exists," in this SDK's own words. `padman`,
+`sio2man` (core) is the IOP-side driver for the SIO2 bus. `padman`,
 `mtapman` (multitap), and the memory-card drivers (see
-[Storage](/guide/architecture/storage)) are all separate IOP modules
-that sit on top of it, each owning one kind of device on that shared
-bus. On the EE side, `pad`, `mtap`, and `mc` are the matching RPC
-clients your game code actually calls.
+[Storage](/guide/architecture/storage)) are separate IOP modules
+that sit on top of it, each owning one kind of device on the bus. On the EE side, `pad`, `mtap` and `mc` are the matching RPC
+clients your game code calls.
 
 | Device | EE-side client | IOP-side driver |
 |---|---|---|
@@ -27,21 +24,19 @@ clients your game code actually calls.
 | Keyboard | `kbd` | (its own IOP USB driver) |
 | Infrared remote | `rm` | `rmman` |
 
-`padman`/`mtapman`/the memory-card drivers get loaded automatically as
-part of a normal EE program using `pad`/`mtap`/`mc` - you don't usually
-load the IOP side by hand the way you might for a less common driver.
+`padman`/`mtapman`/the memory-card drivers are loaded automatically when an EE program uses `pad`, `mtap` or `mc`.
 
-## USB devices are a separate path
+## USB devices
 
-Keyboards, mice, and USB storage don't go through SIO2 at all - they're
-reached through the IOP's own USB stack (`usbd` and friends), a
-completely separate hardware path from the controller ports. `kbd`'s
-EE-side API looks similar to `pad`'s (RPC client to an IOP driver), but
-underneath it's talking to USB IOP modules, not SIO2 ones.
+Keyboards, mice and USB storage do not use SIO2. They are
+reached through the IOP's USB stack (`usbd` and related modules), a
+separate hardware path from the controller ports. `kbd`'s
+EE-side API resembles `pad`'s (an RPC client to an IOP driver), but
+it talks to USB IOP modules.
 
 ## See also
 
 - [EE, IOP, and SIF](/guide/architecture/ee-iop-sif) - the RPC pattern
   every one of these clients uses
-- [Storage](/guide/architecture/storage) - memory cards as a storage
-  device, not just a SIO2 peripheral
+- [Storage](/guide/architecture/storage) - memory cards as storage
+  devices

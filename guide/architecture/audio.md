@@ -1,17 +1,17 @@
 # Audio <Badge type="warning" text="beta" />
 
-> New, hand-written section - see the note on the [cheat sheet](/guide/architecture/cheat-sheet).
+> This section is in beta. See the note on the [cheat sheet](/guide/architecture/cheat-sheet).
 
-Like most PS2 peripherals, the sound chip (SPU2) is IOP-side hardware
-- there's no direct EE-to-SPU2 path. Every audio package in this SDK is
-either an IOP driver that actually touches SPU2 registers, or an
+Like most PS2 peripherals, the sound chip (SPU2) is IOP-side hardware.
+There is no direct path from the EE to SPU2. Every audio package in this SDK is
+either an IOP driver that accesses SPU2 registers or an
 EE-side client that reaches one over SIF (see
 [EE, IOP, and SIF](/guide/architecture/ee-iop-sif)).
 
-## The real layering
+## Layering
 
-This SDK carries two genuinely separate register-level SPU2 drivers,
-and everything else builds on one of them:
+This SDK has two separate register-level SPU2 drivers.
+Everything else builds on one of them:
 
 ```
 core/libsd  ─────┐                     core/libspu2 ─────┐
@@ -23,26 +23,21 @@ core/libsd  ─────┐                     core/libspu2 ─────�
 ```
 
 - **`libsd`** and **`libspu2`** (both core) are independent,
-  register-level SPU2 drivers - direct hardware access, no more
-  primitive path exists for either. They aren't two versions of the
-  same thing; they're two separate implementations that happen to both
-  exist in this codebase's history.
+  register-level SPU2 drivers with direct hardware access. They are separate implementations, not versions of the same driver.
 - **`libsnd2`** (world) is a MIDI/sequencer layer built on `libspu2`.
 - **`rspu2drv`** (world) is an RPC-exposed driver that statically links
-  *both* `libsnd2` and `libspu2` - the most layered of the group.
-- **`sdr`** (world) is an RPC wrapper around `libsd` specifically
-  (its own IOP binary is literally named `sdrdrv.irx`).
-- **`ps2snd`** (core) is the EE-side RPC *client* matching whichever of
-  these IOP drivers is actually running - the thing your EE code
-  actually calls.
-- **`ahx`** (core) is a separate EE-side RPC client, for the IOP's AHX
-  audio-codec driver specifically (a compressed audio format, distinct
-  from the general SPU2 drivers above).
+  both `libsnd2` and `libspu2`.
+- **`sdr`** (world) is an RPC wrapper around `libsd`
+  (its IOP binary is `sdrdrv.irx`).
+- **`ps2snd`** (core) is the EE-side RPC client for whichever of
+  these IOP drivers is running. Your EE code calls it.
+- **`ahx`** (core) is a separate EE-side RPC client for the IOP's AHX
+  audio-codec driver (a compressed audio format). It is separate from the SPU2 drivers above.
 
-## `audio`: the easy path
+## `audio`
 
 **`audio`** (world) is a higher-level playback API: load a sound, play it on a channel, or feed PCM to a
-stream for music and video audio. It is the easiest way to get audio into a homebrew project. It has an IOP
+stream for music and video audio. It has an IOP
 driver, `audio.irx`, that drives the SPU2 through `libsd`, and an EE library, `libaudio.a`, that your code
 links. It is licensed AFL-2.0, like the rest of the `world` tier.
 
@@ -73,19 +68,19 @@ without source changes: link `audsrv-compat` and embed the driver under the old 
 The original [`audsrv`](https://github.com/ps2build/audsrv) is still available as its own repo, under
 its own license.
 
-**`libmad`** (world) decodes MP3 - pair it with `audio` (or one of the lower-level drivers above) for
-playback rather than expecting it to produce sound on its own; it only turns compressed audio into raw PCM
-samples.
+**`libmad`** (world) decodes MP3 to raw PCM samples. It feeds `audio` or one of the lower-level drivers for
+playback.
 
-## Picking a layer
+## Layer summary
 
-For almost any real game, `audio` is the right starting point: a sound effect or a music track plays without
-any knowledge of SPU2 voices, batches, or RPC plumbing. Reach for `libsd`/`libspu2`/`ps2snd` directly only if
-`audio` can't do what you need (bespoke DSP effects, direct voice-level control) - that is a much larger jump
-in complexity.
+| Need | Package |
+|---|---|
+| Sound effects, music streams, reverb | `audio` |
+| Voice-level control, custom DSP | `libsd`, `libspu2`, `ps2snd` |
+| MIDI sequencing | `libsnd2` |
+| MP3 decoding | `libmad` |
 
 ## See also
 
-- [EE, IOP, and SIF](/guide/architecture/ee-iop-sif) - why "EE client +
-  IOP driver" is the shape of almost every package pair here
+- [EE, IOP, and SIF](/guide/architecture/ee-iop-sif) - why most packages pair an EE client with an IOP driver
 - [Packages](/guide/packages) - the core/world license split

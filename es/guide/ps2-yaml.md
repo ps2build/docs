@@ -1,7 +1,6 @@
 # ps2.yaml
 
-La definición de compilación que lee `ps2build`. Una mínima, generada
-por `ps2build init`:
+La definición de compilación que lee `ps2build`. `ps2build init` genera una mínima:
 
 ```yaml
 project: my-game
@@ -17,25 +16,23 @@ targets:
 Cada target tiene un `type`: `ee`, `iop`, `ee_lib`, o `iop_lib`.
 
 - **`ee`** - un `.elf` arrancable. Las bibliotecas estándar (kernel,
-  cglue, cdvd) ya están enlazadas automáticamente - solo lista
-  bibliotecas *extra* en `libs:`. Pon `output_bin: true` para además
+  cglue, cdvd) se enlazan automáticamente. Lista solo las
+  bibliotecas adicionales en `libs:`. Pon `output_bin: true` para además
   producir un `.bin` plano, o `pack: true` para producir un
   `<name>-packed.elf` comprimido y autoextraíble.
-- **`iop`** - un módulo `.irx` reubicable. Enlazado de forma especial
-  (`-nostdlib -dc -r`), despojado de símbolos (stripped), y luego
-  pasado por la herramienta `iopfixup`.
-- **`ee_lib` / `iop_lib`** - compila como un target `ee`/`iop` pero
-  archiva en `lib<name>.a` en lugar de enlazar - nunca se enlaza por sí
-  mismo. Un target `ee` enlaza contra un `ee_lib` (e `iop` contra
-  `iop_lib`) listando su *nombre* de target (no `lib<name>.a`) en su
-  propio `libs:`, junto con cualquier nombre de biblioteca externa, en
-  la misma lista - el orden importa, ya que el orden de enlazado
-  estático se preserva exactamente como se escribió.
+- **`iop`** - un módulo `.irx` reubicable. Se enlaza con
+  `-nostdlib -dc -r`, se le quitan los símbolos y luego lo procesa
+  `iopfixup`.
+- **`ee_lib` / `iop_lib`** - compila como un target `ee` o `iop` pero
+  produce `lib<name>.a` y no se enlaza por sí mismo.
+  Un target `ee` enlaza un `ee_lib` (e `iop` un
+  `iop_lib`) listando el nombre del target, sin `lib<name>.a`, en su
+  `libs:` junto a los nombres de bibliotecas externas. El orden de enlazado se preserva
+  como se escribió, así que el orden importa.
 
 El enlazado final de un target `ee` cambia automáticamente al driver de
-enlazado de C++ cuando se necesita soporte de runtime de C++ - sus
-propias fuentes contienen un archivo `.cpp`/`.cc`/`.cxx`, o enlaza un
-`ee_lib` que sí lo hace. Nunca necesitas hacer nada para activar esto.
+enlazado de C++ cuando el target tiene una fuente `.cpp`, `.cc` o `.cxx`, o enlaza un
+`ee_lib` que la tiene. No hace falta configuración.
 
 ## Incrustando un módulo IOP (`embed_irx`)
 
@@ -49,8 +46,8 @@ extern unsigned int size_<name>_irx;
 SifExecModuleBuffer(<name>_irx, size_<name>_irx, 0, NULL, NULL);
 ```
 
-Si dos targets `ee` incrustan el mismo módulo `iop`, solo se compila
-una vez y se comparte.
+Si dos targets `ee` incrustan el mismo módulo `iop`, se compila
+una sola vez.
 
 ## Campos
 
@@ -76,8 +73,7 @@ una vez y se comparte.
 | `imports_lst` | target | Solo `iop` - ruta a un archivo `imports.lst` |
 | `exports_tab` | target | Solo `iop` - ruta a un archivo `exports.tab` |
 
-Garantizado que es correcto - el JSON Schema completo sale directamente
-de la propia herramienta:
+La herramienta imprime el JSON Schema completo:
 
 ```bash
 ps2build schema

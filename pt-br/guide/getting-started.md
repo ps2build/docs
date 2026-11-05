@@ -2,7 +2,7 @@
 
 ## Instale o SDK
 
-Primeiro, instale o [PS2BUILD](/pt-br/guide/installation) se ainda não tiver feito isso, e depois volte aqui para compilar seu primeiro projeto!
+[Instale o PS2BUILD](/pt-br/guide/installation) primeiro e depois compile seu primeiro projeto aqui.
 
 ## Crie um projeto
 
@@ -14,7 +14,7 @@ Em um novo diretório, execute:
 ps2build init
 ```
 
-Isso cria os seguintes arquivos do projeto:
+Isso cria:
 ```
 .
 ├─ .clangd
@@ -23,27 +23,27 @@ Isso cria os seguintes arquivos do projeto:
 └─ ps2.yaml
 ```
 
-- `main.c` é seu arquivo fonte com um simples `printf` de hello world para você começar.
-- `.clangd` é um arquivo de suporte que ajuda seu editor a entender a toolchain da PS2.
-- `ps2.yaml` é a definição de build, que permite definir executáveis, bibliotecas, drivers e muito mais.
+- `main.c` é um programa hello world com `printf`.
+- `.clangd` configura o editor para a toolchain do PS2.
+- `ps2.yaml` é a definição de build para executáveis, bibliotecas, drivers e mais.
 
 ### Passo 2
 
-Agora rode o build:
+Execute o build:
 
 ```
 ps2build build
 ```
 
-Um arquivo de suporte `compile_commands.json` para o intellisense é gerado automaticamente, para sua conveniência.
+O build também gera `compile_commands.json` para o autocompletar do editor.
 
 ### Passo 3
 
-Parabéns! Agora você tem um arquivo `.elf` em `build/bin/<nome do projeto>.elf`, que pode ser executado no PCSX2 ou em hardware real!
+A saída é `build/bin/<nome do projeto>.elf`, que roda no PCSX2 ou em hardware.
 
 ## Próximos passos
 
-O PS2BUILD inclui um sistema de pacotes simples para manter as dependências modulares.
+O PS2BUILD inclui um sistema de pacotes para bibliotecas e drivers.
 
 Para vincular um pacote instalado, adicione um item ao array `libs:` no `ps2.yaml`.
 
@@ -55,4 +55,4 @@ targets:
     libs: [png, freetype, gskit, dmakit]
 ```
 
-Veja [Pacotes](/pt-br/guide/packages) para entender como os pacotes funcionam, e [ps2.yaml](/pt-br/guide/ps2-yaml) para o formato completo de descrição de build do `ps2.yaml`.
+Veja [Pacotes](/pt-br/guide/packages) para entender como os pacotes funcionam, e [ps2.yaml](/pt-br/guide/ps2-yaml) para o formato completo.
