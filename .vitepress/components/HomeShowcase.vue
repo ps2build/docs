@@ -3,18 +3,18 @@ import { withBase } from 'vitepress'
 import { osIcons } from './os-icons'
 
 defineProps<{
-  before: { title: string; code: string }
-  after: { title: string; code: string }
-  platformsLabel: string
-  platforms: { id: string; name: string }[]
-  actions: { text: string; link: string; primary?: boolean }[]
-  links: { text: string; link: string }[]
+  before?: { title: string; code: string }
+  after?: { title: string; code: string }
+  platformsLabel?: string
+  platforms?: { id: string; name: string }[]
+  actions?: { text: string; link: string; primary?: boolean }[]
+  links?: { text: string; link: string }[]
 }>()
 </script>
 
 <template>
   <section class="showcase">
-    <div class="compare">
+    <div v-if="before && after" class="compare">
       <figure class="panel panel-before">
         <figcaption>{{ before.title }}</figcaption>
         <pre><code>{{ before.code }}</code></pre>
@@ -25,7 +25,7 @@ defineProps<{
       </figure>
     </div>
 
-    <div class="actions">
+    <div v-if="actions" class="actions">
       <a
         v-for="a in actions"
         :key="a.link"
@@ -34,7 +34,7 @@ defineProps<{
       >{{ a.text }}</a>
     </div>
 
-    <div class="platforms">
+    <div v-if="platforms" class="platforms">
       <span class="platforms-label">{{ platformsLabel }}</span>
       <span v-for="p in platforms" :key="p.id" class="platform">
         <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true" v-html="osIcons[p.id]" />
@@ -42,7 +42,7 @@ defineProps<{
       </span>
     </div>
 
-    <nav class="links">
+    <nav v-if="links" class="links">
       <a v-for="l in links" :key="l.link" :href="withBase(l.link)">{{ l.text }}</a>
     </nav>
   </section>

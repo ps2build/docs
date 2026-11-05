@@ -19,6 +19,9 @@ hero:
 
 <script setup>
 import HomeShowcase from './.vitepress/components/HomeShowcase.vue'
+import FeatureSection from './.vitepress/components/FeatureSection.vue'
+import OsTiles from './.vitepress/components/OsTiles.vue'
+import EditorTiles from './.vitepress/components/EditorTiles.vue'
 
 const before = {
   title: 'ps2sdk Makefile',
@@ -79,27 +82,30 @@ curl -sSfL https://ps2build.dev/install.sh | sh
 ```
 :::
 
-## First build
+<FeatureSection index="01" title="Cross platform" text="Runs natively on Windows, Linux and macOS.">
+<OsTiles />
+</FeatureSection>
 
-In a new folder, run:
+<FeatureSection index="02" title="Self contained" text="Installs into its own directory and runs on your OS.">
 
-```shell
-ps2build init
-ps2build build
-```
+- No Docker
+- No manual environment setup
+- Toolchain and packages installed and updated by `ps2build`
 
-The result is `build/bin/<project>.elf`, ready for PCSX2 or hardware. Targets, libraries and drivers are described in `ps2.yaml`:
+</FeatureSection>
 
-```yaml
-project: my-game
+<FeatureSection index="03" title="Simple build definitions" wide text="A Makefile that includes shared rules and lists include paths, library paths and -l flags becomes one ps2.yaml. Packages named in libs: supply their headers and link flags.">
+<HomeShowcase :before="before" :after="after" />
+</FeatureSection>
 
-targets:
-  - name: my-game
-    type: ee
-    sources: [src/main.c]
-    libs: [png, freetype, gskit, dmakit]
-```
+<FeatureSection index="04" title="Editor support" text="compile_commands.json is built in. Works in most editors.">
+<EditorTiles />
+</FeatureSection>
 
-## Less to write
+<div class="home-end">
+<HomeShowcase :actions="actions" :links="links" />
+</div>
 
-<HomeShowcase :before="before" :after="after" :platforms-label="platformsLabel" :platforms="platforms" :actions="actions" :links="links" />
+<style>
+.home-end { margin-top: 56px; padding-top: 56px; border-top: 1px solid var(--vp-c-divider); }
+</style>

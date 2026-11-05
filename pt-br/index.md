@@ -41,27 +41,6 @@ curl -sSfL https://ps2build.dev/install.sh | sh
 ```
 :::
 
-## Primeiro build
-
-Em uma pasta nova, execute:
-
-```shell
-ps2build init
-ps2build build
-```
-
-O resultado é `build/bin/<projeto>.elf`, pronto para o PCSX2 ou hardware. Targets, bibliotecas e drivers são descritos em `ps2.yaml`:
-
-```yaml
-project: my-game
-
-targets:
-  - name: my-game
-    type: ee
-    sources: [src/main.c]
-    libs: [png, freetype, gskit, dmakit]
-```
-
 ## Próximos passos
 
 <LinkGrid :items="links" />
