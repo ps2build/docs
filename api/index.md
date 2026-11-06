@@ -5,6 +5,11 @@ aside: false
 
 # API reference
 
-The generated reference for `sdk-core` and `sdk-world` is coming soon.
+The generated reference for every public header and function is at [api.ps2build.dev](https://api.ps2build.dev).
 
-It will cover every public header and function in both SDKs. Until then, the headers in the [sdk-core](https://github.com/ps2build/sdk-core) and [sdk-world](https://github.com/ps2build/sdk-world) repositories are the source of truth, and the [guide](/guide/getting-started) covers the common workflows.
+| Package | Reference |
+|---|---|
+| sdk-core | [Latest release](https://api.ps2build.dev/sdk-core/latest/) |
+| sdk-world | [Latest release](https://api.ps2build.dev/sdk-world/latest/) |
+
+Each release also keeps its own versioned copy. The [guide](/guide/getting-started) covers the common workflows.
