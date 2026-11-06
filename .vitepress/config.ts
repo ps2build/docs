@@ -97,7 +97,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       themeConfig: {
         nav: [
           { text: 'Guide', link: '/guide/getting-started' },
-          { text: 'API Reference', link: '/api/' },
+          { text: 'API Reference', link: 'https://api.ps2build.dev' },
           { text: 'ps2build', link: 'https://github.com/ps2build/ps2build' },
           { text: 'All repos', link: 'https://github.com/ps2build' },
         ],
@@ -143,7 +143,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       themeConfig: {
         nav: [
           { text: 'Guía', link: '/es/guide/getting-started' },
-          { text: 'Referencia de API', link: '/es/api/' },
+          { text: 'Referencia de API', link: 'https://api.ps2build.dev' },
           { text: 'ps2build', link: 'https://github.com/ps2build/ps2build' },
           { text: 'Todos los repos', link: 'https://github.com/ps2build' },
         ],
@@ -189,7 +189,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       themeConfig: {
         nav: [
           { text: 'Guia', link: '/pt-br/guide/getting-started' },
-          { text: 'Referência de API', link: '/pt-br/api/' },
+          { text: 'Referência de API', link: 'https://api.ps2build.dev' },
           { text: 'ps2build', link: 'https://github.com/ps2build/ps2build' },
           { text: 'Todos os repos', link: 'https://github.com/ps2build' },
         ],

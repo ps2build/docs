@@ -3,8 +3,13 @@ sidebar: false
 aside: false
 ---
 
-# Referência da API
+# Referência de API
 
-A referência gerada de `sdk-core` e `sdk-world` estará disponível em breve.
+A referência gerada de cada cabeçalho e função pública está em [api.ps2build.dev](https://api.ps2build.dev).
 
-Ela cobrirá todos os cabeçalhos e funções públicas dos dois SDKs. Enquanto isso, os cabeçalhos dos repositórios [sdk-core](https://github.com/ps2build/sdk-core) e [sdk-world](https://github.com/ps2build/sdk-world) são a fonte de referência, e o [guia](/pt-br/guide/getting-started) cobre os fluxos de trabalho comuns.
+| Pacote | Referência |
+|---|---|
+| sdk-core | [Última versão](https://api.ps2build.dev/sdk-core/latest/) |
+| sdk-world | [Última versão](https://api.ps2build.dev/sdk-world/latest/) |
+
+Cada versão também mantém sua própria cópia. O [guia](/pt-br/guide/getting-started) cobre os fluxos de trabalho comuns.

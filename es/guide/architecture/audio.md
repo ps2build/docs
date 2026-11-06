@@ -55,7 +55,7 @@ enlaza. Su licencia es AFL-2.0, como el resto del tier `world`.
 
 Dos ejemplos, un reproductor de sonidos y un generador de tonos, están en la carpeta
 [`audio/examples`](https://github.com/ps2build/sdk-world/tree/master/audio/examples) de
-`sdk-world`. La [referencia de la API](/api/) cubre cada función, el formato `.adp` y las reglas de
+`sdk-world`. La [referencia de la API](https://api.ps2build.dev/sdk-world/latest/) cubre cada función, el formato `.adp` y las reglas de
 hilos.
 
 ### Código escrito para `audsrv`
@@ -63,7 +63,7 @@ hilos.
 **`audsrv-compat`** (world) ofrece la API de audsrv sobre `audio`, de modo que el código existente compila y corre
 sin cambios de fuente: enlaza `audsrv-compat` e incrusta el driver con el símbolo antiguo mediante
 `embed_irx: [libsd, "audio:audsrv"]`. El audio de CD no está soportado y las llamadas de CD devuelven un error. La
-[referencia de la API](/api/) tiene una guía de migración con una fila por llamada de audsrv.
+[referencia de la API](https://api.ps2build.dev/sdk-world/latest/) tiene una guía de migración con una fila por llamada de audsrv.
 
 El [`audsrv`](https://github.com/ps2build/audsrv) original sigue disponible como repositorio independiente, con
 su propia licencia.
