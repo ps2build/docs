@@ -11,6 +11,12 @@ targets:
     sources: [src/main.c]
 ```
 
+`ps2.yaml` and `ps2workspace.yaml` are read as schema 1 when `schema_version`
+is missing. A file with a `schema_version` newer than your `ps2build` is an
+error that tells you to run `ps2build update`. Unknown keys print a warning and
+are ignored. Within `ps2build` 1.x, keys are only added, never removed or given
+a new meaning.
+
 ## Target types
 
 Every target has a `type`: `ee`, `iop`, `ee_lib`, or `iop_lib`.
@@ -50,6 +56,7 @@ If two `ee` targets embed the same `iop` module, it is built once.
 
 | Field | Applies to | Meaning |
 |---|---|---|
+| `schema_version` | root | Optional integer. The `ps2.yaml` format version; 1 if missing |
 | `project` | root | Project name (documentation only) |
 | `targets` | root | The list of build targets |
 | `name` | target | Unique name - the ninja alias, and how other targets reference it |
