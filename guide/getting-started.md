@@ -25,7 +25,7 @@ This creates:
 
 - `main.c` is a hello world program using `printf`.
 - `.clangd` configures your editor for the PS2 toolchain.
-- `ps2.yaml` is the build definition for executables, libraries, drivers and more.
+- `ps2.yaml` is the build definition for executables, libraries, drivers and more. Its format is stable across `ps2build` 1.x; see [ps2.yaml](/guide/ps2-yaml).
 
 ### Step 2
 
